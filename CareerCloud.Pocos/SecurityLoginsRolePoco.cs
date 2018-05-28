@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace CareerCloud.Pocos
 {
     [Table("Security_Logins_Roles")]
-    public class SecurityLoginsRolePoco
+    public class SecurityLoginsRolePoco : IPoco
     {
         [Key]
         public Guid Id { get; set; }

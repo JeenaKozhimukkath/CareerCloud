@@ -54,6 +54,7 @@
     <Compile Include="CompanyJobSkillPoco.cs" />
     <Compile Include="CompanyLocationPoco.cs" />
     <Compile Include="CompanyProfilePoco.cs" />
+    <Compile Include="IPoco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SecurityLoginPoco.cs" />
     <Compile Include="SecurityLoginsLogPoco.cs" />
