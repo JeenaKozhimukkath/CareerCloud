@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,7 +41,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicantEducationPoco.cs" />
+    <Compile Include="ApplicantJobApplicationPoco.cs" />
+    <Compile Include="ApplicantProfilePoco.cs" />
+    <Compile Include="ApplicantResumePoco.cs" />
+    <Compile Include="ApplicantSkillPoco.cs" />
+    <Compile Include="ApplicantWorkHistoryPoco.cs" />
+    <Compile Include="CompanyDescriptionPoco.cs" />
+    <Compile Include="CompanyJobEducationPoco.cs" />
+    <Compile Include="CompanyJobPoco.cs" />
+    <Compile Include="CompanyJobsDescriptionPoco.cs" />
+    <Compile Include="CompanyJobSkillPoco.cs" />
+    <Compile Include="CompanyLocationPoco.cs" />
+    <Compile Include="CompanyProfilePoco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecurityLoginPoco.cs" />
+    <Compile Include="SecurityLoginsLogPoco.cs" />
+    <Compile Include="SecurityLoginsRolePoco.cs" />
+    <Compile Include="SecurityRolePoco.cs" />
+    <Compile Include="SystemCountryCodePoco.cs" />
+    <Compile Include="SystemLanguageCodePoco.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
