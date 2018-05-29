@@ -12,7 +12,7 @@ namespace CareerCloud.Pocos
     public class SystemCountryCodePoco
     {
         [Key]
-        public Guid Code { get; set; }
+        public string Code { get; set; }
 
         public string Name { get; set; }
     }

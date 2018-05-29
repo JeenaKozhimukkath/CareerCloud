@@ -19,13 +19,13 @@ namespace CareerCloud.Pocos
         public string Password { get; set; }
 
         [Column("Created_Date")]
-        public DateTime CreatedDate { get; set; }
+        public DateTime Created { get; set; }
 
         [Column("Password_Update_Date")]
-        public DateTime? PasswordUpdateDate { get; set; }
+        public DateTime? PasswordUpdate { get; set; }
 
         [Column("Agreement_Accepted_Date")]
-        public DateTime? AgreementAcceptedDate { get; set; }
+        public DateTime? AgreementAccepted { get; set; }
 
         [Column("Is_Locked")]
         public Boolean IsLocked { get; set; }

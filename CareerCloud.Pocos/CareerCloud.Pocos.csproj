@@ -50,7 +50,7 @@
     <Compile Include="CompanyDescriptionPoco.cs" />
     <Compile Include="CompanyJobEducationPoco.cs" />
     <Compile Include="CompanyJobPoco.cs" />
-    <Compile Include="CompanyJobsDescriptionPoco.cs" />
+    <Compile Include="CompanyJobDescriptionPoco.cs" />
     <Compile Include="CompanyJobSkillPoco.cs" />
     <Compile Include="CompanyLocationPoco.cs" />
     <Compile Include="CompanyProfilePoco.cs" />
