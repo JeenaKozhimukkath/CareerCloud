@@ -66,8 +66,8 @@ namespace CareerCloud.ADODataAccessLayer
 
                     poco.Id = reader.GetGuid(0);
                     poco.Applicant = reader.GetGuid(1);
-                    poco.Skill = reader[2].ToString();
-                    poco.SkillLevel = reader[3].ToString();
+                    poco.Skill = reader.GetString(2);
+                    poco.SkillLevel = reader.GetString(3);
                     poco.StartMonth = (byte)reader[4];
                     poco.StartYear = (int)reader[5];
                     poco.EndMonth = (byte)reader[6];

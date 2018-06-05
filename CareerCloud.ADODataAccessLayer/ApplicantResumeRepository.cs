@@ -62,7 +62,7 @@ namespace CareerCloud.ADODataAccessLayer
 
                     poco.Id = reader.GetGuid(0);
                     poco.Applicant = reader.GetGuid(1);
-                    poco.Resume = reader[2].ToString();
+                    poco.Resume = reader.GetString(2);
                     poco.LastUpdated = (DateTime?)reader[3];
 
                     pocos[position] = poco;

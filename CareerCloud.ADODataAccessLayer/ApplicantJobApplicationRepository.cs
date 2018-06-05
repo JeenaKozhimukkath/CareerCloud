@@ -64,7 +64,7 @@ namespace CareerCloud.ADODataAccessLayer
                     poco.Id = reader.GetGuid(0);
                     poco.Applicant = reader.GetGuid(1);
                     poco.Job = reader.GetGuid(2);
-                    poco.ApplicationDate = (DateTime)reader[3];
+                    poco.ApplicationDate = reader.GetDateTime(3);
                     poco.TimeStamp= (byte[])reader[4];
 
                     pocos[position] = poco;

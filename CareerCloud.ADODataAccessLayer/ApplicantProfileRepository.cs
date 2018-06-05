@@ -71,12 +71,12 @@ namespace CareerCloud.ADODataAccessLayer
                     poco.Login = reader.GetGuid(1);
                     poco.CurrentSalary = (decimal?)reader[2];
                     poco.CurrentRate = (decimal?)reader[3];
-                    poco.Currency = reader[4].ToString();
-                    poco.Country= reader[5].ToString();
-                    poco.Province= reader[6].ToString();
-                    poco.Street= reader[7].ToString();
-                    poco.City= reader[8].ToString();
-                    poco.PostalCode= reader[9].ToString();
+                    poco.Currency = reader.GetString(4);
+                    poco.Country= reader.GetString(5);
+                    poco.Province= reader.GetString(6);
+                    poco.Street= reader.GetString(7);
+                    poco.City= reader.GetString(8);
+                    poco.PostalCode= reader.GetString(9);
                     poco.TimeStamp= (byte[])reader[10];
                     pocos[position] = poco;
                     position++;
