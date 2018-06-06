@@ -52,7 +52,16 @@
     <Compile Include="CompanyJobDescriptionRepository.cs" />
     <Compile Include="CompanyJobEducationRepository.cs" />
     <Compile Include="CompanyJobRepository.cs" />
+    <Compile Include="CompanyJobSkillRepository.cs" />
+    <Compile Include="CompanyLocationRepository.cs" />
+    <Compile Include="CompanyProfileRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SecurityLoginRepository.cs" />
+    <Compile Include="SecurityLoginsLogRepository.cs" />
+    <Compile Include="SecurityLoginsRoleRepository.cs" />
+    <Compile Include="SecurityRoleRepository.cs" />
+    <Compile Include="SystemCountryCodeRepository.cs" />
+    <Compile Include="SystemLanguageCodeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CareerCloud.DataAccessLayer\CareerCloud.DataAccessLayer.csproj">

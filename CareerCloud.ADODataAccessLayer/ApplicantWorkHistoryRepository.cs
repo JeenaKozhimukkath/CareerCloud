@@ -19,6 +19,7 @@ namespace CareerCloud.ADODataAccessLayer
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = _connection;
 
+                int rowsEffected = 0;
                 foreach (ApplicantWorkHistoryPoco poco in items)
                 {
                     cmd.CommandText = @"insert into Applicant_Work_History
@@ -39,7 +40,7 @@ namespace CareerCloud.ADODataAccessLayer
                     cmd.Parameters.AddWithValue("@End_Year", poco.EndYear);
 
                     _connection.Open();
-                    int rowsEffected = cmd.ExecuteNonQuery();
+                    rowsEffected += cmd.ExecuteNonQuery();
                     _connection.Close();
                 }
             }

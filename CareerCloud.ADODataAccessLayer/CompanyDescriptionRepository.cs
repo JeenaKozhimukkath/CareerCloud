@@ -19,6 +19,7 @@ namespace CareerCloud.ADODataAccessLayer
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = _connection;
 
+                int rowsEffected = 0;
                 foreach (CompanyDescriptionPoco poco in items)
                 {
                     cmd.CommandText = @"insert into Company_Descriptions
@@ -32,7 +33,7 @@ namespace CareerCloud.ADODataAccessLayer
                     cmd.Parameters.AddWithValue("@Company_Description", poco.CompanyDescription);
                    
                     _connection.Open();
-                    int rowsEffected = cmd.ExecuteNonQuery();
+                     rowsEffected += cmd.ExecuteNonQuery();
                     _connection.Close();
                 }
             }

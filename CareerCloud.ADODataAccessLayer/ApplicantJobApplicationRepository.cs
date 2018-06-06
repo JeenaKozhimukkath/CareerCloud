@@ -18,7 +18,7 @@ namespace CareerCloud.ADODataAccessLayer
             {
                 SqlCommand cmd = new SqlCommand();
                 cmd.Connection = _connection;
-
+                int rowsEffected = 0;
                 foreach (ApplicantJobApplicationPoco poco in items)
                 {
                     cmd.CommandText = @"insert into Applicant_Job_Applications
@@ -32,7 +32,7 @@ namespace CareerCloud.ADODataAccessLayer
                     cmd.Parameters.AddWithValue("@Application_Date", poco.ApplicationDate);
 
                     _connection.Open();
-                    int rowsEffected = cmd.ExecuteNonQuery();
+                     rowsEffected += cmd.ExecuteNonQuery();
                     _connection.Close();
 
                 }
