@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 
 namespace CareerCloud.ADODataAccessLayer
 {
-    class ApplicantEducationRepository : BaseADO, IDataRepository<ApplicantEducationPoco>
+   public class ApplicantEducationRepository : BaseADO, IDataRepository<ApplicantEducationPoco>
     {
         public void Add(params ApplicantEducationPoco[] items)
         {
@@ -96,12 +96,53 @@ namespace CareerCloud.ADODataAccessLayer
 
         public void Remove(params ApplicantEducationPoco[] items)
         {
-            throw new NotImplementedException();
-        }
+            using (_connection)
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = _connection;
+
+                foreach (ApplicantEducationPoco poco in items)
+                {
+                    cmd.CommandText = @"delete from Applicant_Educations where Id=@Id";
+                    cmd.Parameters.AddWithValue("@Id", poco.Id);
+
+                    _connection.Open();
+                    cmd.ExecuteNonQuery();
+                    _connection.Close();
+                }
+            }
+         }
 
         public void Update(params ApplicantEducationPoco[] items)
         {
-            throw new NotImplementedException();
+            using (_connection)
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = _connection;
+
+                foreach (ApplicantEducationPoco poco in items)
+                {
+                    cmd.CommandText = @"Update Applicant_Educations set
+                                        Applicant=@Applicant,Major=@Major
+                                        ,Certificate_Diploma=@Certificate_Diploma
+                                        ,Start_Date=@Start_Date
+                                        ,Completion_Date=@Completion_Date
+                                        ,Completion_Percent=@Completion_Percent
+                                        where Id=@Id";
+                                        
+                    cmd.Parameters.AddWithValue("@Applicant", poco.Applicant);
+                    cmd.Parameters.AddWithValue("@Major", poco.Major);
+                    cmd.Parameters.AddWithValue("@Certificate_Diploma", poco.CertificateDiploma);
+                    cmd.Parameters.AddWithValue("@Start_Date", poco.StartDate);
+                    cmd.Parameters.AddWithValue("@Completion_Date", poco.CompletionDate);
+                    cmd.Parameters.AddWithValue("@Completion_Percent", poco.CompletionPercent);
+                    cmd.Parameters.AddWithValue("@Id", poco.Id);
+
+                    _connection.Open();
+                    cmd.ExecuteNonQuery();
+                    _connection.Close();
+                }
+            }
         }
     }
 }

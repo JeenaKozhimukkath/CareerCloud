@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace CareerCloud.ADODataAccessLayer
 {
-    class SecurityLoginsRoleRepository : BaseADO, IDataRepository<SecurityLoginsRolePoco>
+    public class SecurityLoginsRoleRepository : BaseADO, IDataRepository<SecurityLoginsRolePoco>
     {
         public void Add(params SecurityLoginsRolePoco[] items)
         {

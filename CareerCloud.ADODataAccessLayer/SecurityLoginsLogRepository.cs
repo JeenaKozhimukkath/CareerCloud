@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace CareerCloud.ADODataAccessLayer
 {
-    class SecurityLoginsLogRepository : BaseADO, IDataRepository<SecurityLoginsLogPoco>
+    public class SecurityLoginsLogRepository : BaseADO, IDataRepository<SecurityLoginsLogPoco>
     {
         public void Add(params SecurityLoginsLogPoco[] items)
         {

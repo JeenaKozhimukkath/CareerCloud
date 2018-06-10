@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace CareerCloud.ADODataAccessLayer 
 {
-    class ApplicantSkillRepository : BaseADO, IDataRepository<ApplicantSkillPoco>
+    public class ApplicantSkillRepository : BaseADO, IDataRepository<ApplicantSkillPoco>
     {
         public void Add(params ApplicantSkillPoco[] items)
         {
@@ -69,10 +69,10 @@ namespace CareerCloud.ADODataAccessLayer
                     poco.Applicant = reader.GetGuid(1);
                     poco.Skill = reader.GetString(2);
                     poco.SkillLevel = reader.GetString(3);
-                    poco.StartMonth = (byte)reader[4];
-                    poco.StartYear = (int)reader[5];
-                    poco.EndMonth = (byte)reader[6];
-                    poco.EndYear= (int)reader[7];
+                    poco.StartMonth = reader.GetByte(4);
+                    poco.StartYear = reader.GetInt32(5);
+                    poco.EndMonth = reader.GetByte(6);
+                    poco.EndYear= reader.GetInt32(7);
                     poco.TimeStamp = (byte[])reader[8];
 
                     pocos[position] = poco;
