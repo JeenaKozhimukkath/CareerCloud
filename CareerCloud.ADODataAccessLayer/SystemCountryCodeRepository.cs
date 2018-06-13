@@ -14,10 +14,11 @@ namespace CareerCloud.ADODataAccessLayer
     {
         public void Add(params SystemCountryCodePoco[] items)
         {
-            using (_connection)
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.Connection = _connection;
+                cmd.Connection = connection;
 
                 int rowsEffected = 0;
                 foreach (SystemCountryCodePoco poco in items)
@@ -29,9 +30,9 @@ namespace CareerCloud.ADODataAccessLayer
                     cmd.Parameters.AddWithValue("@Code", poco.Code);
                     cmd.Parameters.AddWithValue("@Name", poco.Name);
                    
-                    _connection.Open();
+                    connection.Open();
                     rowsEffected += cmd.ExecuteNonQuery();
-                    _connection.Close();
+                    connection.Close();
                 }
             }
         }
@@ -44,14 +45,14 @@ namespace CareerCloud.ADODataAccessLayer
         public IList<SystemCountryCodePoco> GetAll(params Expression<Func<SystemCountryCodePoco, object>>[] navigationProperties)
         {
             SystemCountryCodePoco[] pocos = new SystemCountryCodePoco[1000];
-
-            using (_connection)
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.Connection = _connection;
+                cmd.Connection = connection;
                 cmd.CommandText = "Select Code,Name from System_Country_Codes";
 
-                _connection.Open();
+                connection.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 int position = 0;
@@ -65,10 +66,10 @@ namespace CareerCloud.ADODataAccessLayer
                     pocos[position] = poco;
                     position++;
                 }
-                _connection.Close();
+                connection.Close();
             }
 
-            return pocos;
+            return pocos.Where(p => p != null).ToList();
         }
 
         public IList<SystemCountryCodePoco> GetList(Expression<Func<SystemCountryCodePoco, bool>> where, params Expression<Func<SystemCountryCodePoco, object>>[] navigationProperties)
@@ -84,12 +85,46 @@ namespace CareerCloud.ADODataAccessLayer
 
         public void Remove(params SystemCountryCodePoco[] items)
         {
-            throw new NotImplementedException();
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+
+                foreach (SystemCountryCodePoco poco in items)
+                {
+                    cmd.CommandText = @"delete from System_Country_Codes where Code=@Code";
+                    cmd.Parameters.AddWithValue("@Code", poco.Code);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
         }
 
         public void Update(params SystemCountryCodePoco[] items)
         {
-            throw new NotImplementedException();
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+
+                foreach (SystemCountryCodePoco poco in items)
+                {
+                    cmd.CommandText = @"Update System_Country_Codes set
+                                        Name=@Name
+                                        where Code=@Code";
+
+                    cmd.Parameters.AddWithValue("@Code", poco.Code);
+                    cmd.Parameters.AddWithValue("@Name", poco.Name);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
         }
     }
 }

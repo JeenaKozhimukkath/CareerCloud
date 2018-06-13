@@ -14,10 +14,11 @@ namespace CareerCloud.ADODataAccessLayer
     {
         public void Add(params SystemLanguageCodePoco[] items)
         {
-            using (_connection)
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.Connection = _connection;
+                cmd.Connection = connection;
 
                 int rowsEffected = 0;
                 foreach (SystemLanguageCodePoco poco in items)
@@ -26,13 +27,13 @@ namespace CareerCloud.ADODataAccessLayer
                                     (LanguageID,Name,Native_Name)
                                     values
                                     (@LanguageID,@Name,@Native_Name)";
-                    cmd.Parameters.AddWithValue("@Code", poco.LanguageID);
+                    cmd.Parameters.AddWithValue("@LanguageID", poco.LanguageID);
                     cmd.Parameters.AddWithValue("@Name", poco.Name);
                     cmd.Parameters.AddWithValue("@Native_Name", poco.NativeName);
 
-                    _connection.Open();
+                    connection.Open();
                     rowsEffected += cmd.ExecuteNonQuery();
-                    _connection.Close();
+                    connection.Close();
                 }
             }
         }
@@ -45,14 +46,14 @@ namespace CareerCloud.ADODataAccessLayer
         public IList<SystemLanguageCodePoco> GetAll(params Expression<Func<SystemLanguageCodePoco, object>>[] navigationProperties)
         {
             SystemLanguageCodePoco[] pocos = new SystemLanguageCodePoco[1000];
-
-            using (_connection)
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.Connection = _connection;
+                cmd.Connection = connection;
                 cmd.CommandText = "Select LanguageID,Name,Native_Name from System_Language_Codes";
 
-                _connection.Open();
+                connection.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 int position = 0;
@@ -67,10 +68,10 @@ namespace CareerCloud.ADODataAccessLayer
                     pocos[position] = poco;
                     position++;
                 }
-                _connection.Close();
+                connection.Close();
             }
 
-            return pocos;
+            return pocos.Where(p => p != null).ToList();
         }
 
         public IList<SystemLanguageCodePoco> GetList(Expression<Func<SystemLanguageCodePoco, bool>> where, params Expression<Func<SystemLanguageCodePoco, object>>[] navigationProperties)
@@ -86,12 +87,47 @@ namespace CareerCloud.ADODataAccessLayer
 
         public void Remove(params SystemLanguageCodePoco[] items)
         {
-            throw new NotImplementedException();
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+
+                foreach (SystemLanguageCodePoco poco in items)
+                {
+                    cmd.CommandText = @"delete from System_Language_Codes where LanguageID=@LanguageID";
+                    cmd.Parameters.AddWithValue("@LanguageID", poco.LanguageID);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
         }
 
         public void Update(params SystemLanguageCodePoco[] items)
         {
-            throw new NotImplementedException();
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+
+                foreach (SystemLanguageCodePoco poco in items)
+                {
+                    cmd.CommandText = @"Update System_Language_Codes set
+                                        Name=@Name,Native_Name=@Native_Name
+                                        where LanguageID=@LanguageID";
+
+                    cmd.Parameters.AddWithValue("@LanguageID", poco.LanguageID);
+                    cmd.Parameters.AddWithValue("@Name", poco.Name);
+                    cmd.Parameters.AddWithValue("@Native_Name", poco.NativeName);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
         }
     }
 }

@@ -14,10 +14,11 @@ namespace CareerCloud.ADODataAccessLayer
     {
         public void Add(params SecurityLoginsRolePoco[] items)
         {
-            using (_connection)
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.Connection = _connection;
+                cmd.Connection = connection;
 
                 int rowsEffected = 0;
                 foreach (SecurityLoginsRolePoco poco in items)
@@ -30,9 +31,9 @@ namespace CareerCloud.ADODataAccessLayer
                     cmd.Parameters.AddWithValue("@Login", poco.Login);
                     cmd.Parameters.AddWithValue("@Role", poco.Role);
 
-                    _connection.Open();
+                    connection.Open();
                     rowsEffected += cmd.ExecuteNonQuery();
-                    _connection.Close();
+                    connection.Close();
                 }
             }
         }
@@ -45,14 +46,14 @@ namespace CareerCloud.ADODataAccessLayer
         public IList<SecurityLoginsRolePoco> GetAll(params Expression<Func<SecurityLoginsRolePoco, object>>[] navigationProperties)
         {
             SecurityLoginsRolePoco[] pocos = new SecurityLoginsRolePoco[1000];
-
-            using (_connection)
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.Connection = _connection;
+                cmd.Connection = connection;
                 cmd.CommandText = "Select Id,Login,Role,Time_Stamp from Security_Logins_Roles";
 
-                _connection.Open();
+                connection.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 int position = 0;
@@ -68,10 +69,10 @@ namespace CareerCloud.ADODataAccessLayer
                     pocos[position] = poco;
                     position++;
                 }
-                _connection.Close();
+                connection.Close();
             }
 
-            return pocos;
+            return pocos.Where(p => p != null).ToList();
         }
 
         public IList<SecurityLoginsRolePoco> GetList(Expression<Func<SecurityLoginsRolePoco, bool>> where, params Expression<Func<SecurityLoginsRolePoco, object>>[] navigationProperties)
@@ -87,12 +88,47 @@ namespace CareerCloud.ADODataAccessLayer
 
         public void Remove(params SecurityLoginsRolePoco[] items)
         {
-            throw new NotImplementedException();
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+
+                foreach (SecurityLoginsRolePoco poco in items)
+                {
+                    cmd.CommandText = @"delete from Security_Logins_Roles where Id=@Id";
+                    cmd.Parameters.AddWithValue("@Id", poco.Id);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
         }
 
         public void Update(params SecurityLoginsRolePoco[] items)
         {
-            throw new NotImplementedException();
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+
+                foreach (SecurityLoginsRolePoco poco in items)
+                {
+                    cmd.CommandText = @"Update Security_Logins_Roles set
+                                        Login=@Login,Role=@Role
+                                        where Id=@Id";
+
+                    cmd.Parameters.AddWithValue("@Login", poco.Login);
+                    cmd.Parameters.AddWithValue("@Role", poco.Role);
+                    cmd.Parameters.AddWithValue("@Id", poco.Id);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
         }
     }
 }

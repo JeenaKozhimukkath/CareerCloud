@@ -7,6 +7,7 @@ using CareerCloud.DataAccessLayer;
 using CareerCloud.Pocos;
 using System.Data.SqlClient;
 using System.Linq.Expressions;
+using System.Configuration;
 
 namespace CareerCloud.ADODataAccessLayer
 {
@@ -14,10 +15,11 @@ namespace CareerCloud.ADODataAccessLayer
     {
         public void Add(params CompanyProfilePoco[] items)
         {
-            using (_connection)
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.Connection = _connection;
+                cmd.Connection = connection;
 
                 int rowsEffected = 0;
                 foreach (CompanyProfilePoco poco in items)
@@ -33,9 +35,9 @@ namespace CareerCloud.ADODataAccessLayer
                     cmd.Parameters.AddWithValue("@Contact_Name", poco.ContactName);
                     cmd.Parameters.AddWithValue("@Company_Logo", poco.CompanyLogo);
                     
-                    _connection.Open();
+                    connection.Open();
                     rowsEffected += cmd.ExecuteNonQuery();
-                    _connection.Close();
+                    connection.Close();
                 }
             }
         }
@@ -48,14 +50,14 @@ namespace CareerCloud.ADODataAccessLayer
         public IList<CompanyProfilePoco> GetAll(params Expression<Func<CompanyProfilePoco, object>>[] navigationProperties)
         {
             CompanyProfilePoco[] pocos = new CompanyProfilePoco[1000];
-
-            using (_connection)
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
             {
                 SqlCommand cmd = new SqlCommand();
-                cmd.Connection = _connection;
+                cmd.Connection = connection;
                 cmd.CommandText = "Select Id,Registration_Date,Company_Website,Contact_Phone,Contact_Name,Company_Logo,Time_Stamp from Company_Profiles";
 
-                _connection.Open();
+                connection.Open();
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 int position = 0;
@@ -65,19 +67,19 @@ namespace CareerCloud.ADODataAccessLayer
 
                     poco.Id = reader.GetGuid(0);
                     poco.RegistrationDate = reader.GetDateTime(1);
-                    poco.CompanyWebsite = reader.GetString(2);
+                    poco.CompanyWebsite = reader.IsDBNull(2) ? null : reader.GetString(2);
                     poco.ContactPhone = reader.GetString(3);
-                    poco.ContactName = reader.GetString(4);
-                    poco.CompanyLogo = (byte[])reader[5];
-                    poco.TimeStamp = (byte[])reader[6];
+                    poco.ContactName = reader.IsDBNull(4) ? null : reader.GetString(4);
+                    poco.CompanyLogo = (reader.IsDBNull(5) ? null : (byte[])reader[5]);
+                    poco.TimeStamp = (byte[]) reader[6];
 
                     pocos[position] = poco;
                     position++;
                 }
-                _connection.Close();
+                connection.Close();
             }
 
-            return pocos;
+            return pocos.Where(p => p != null).ToList();
         }
 
         public IList<CompanyProfilePoco> GetList(Expression<Func<CompanyProfilePoco, bool>> where, params Expression<Func<CompanyProfilePoco, object>>[] navigationProperties)
@@ -93,12 +95,54 @@ namespace CareerCloud.ADODataAccessLayer
 
         public void Remove(params CompanyProfilePoco[] items)
         {
-            throw new NotImplementedException();
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+
+                foreach (CompanyProfilePoco poco in items)
+                {
+                    cmd.CommandText = @"delete from Company_Profiles where Id=@Id";
+                    cmd.Parameters.AddWithValue("@Id", poco.Id);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
         }
 
         public void Update(params CompanyProfilePoco[] items)
         {
-            throw new NotImplementedException();
+            SqlConnection connection = new SqlConnection(_ConnectionStr);
+            using (connection)
+            {
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connection;
+
+                foreach (CompanyProfilePoco poco in items)
+                {
+                    cmd.CommandText = @"Update Company_Profiles set
+                                        Registration_Date=@Registration_Date
+                                        ,Company_Website=@Company_Website
+                                        ,Contact_Phone=@Contact_Phone
+                                        ,Contact_Name=@Contact_Name
+                                        ,Company_Logo=@Company_Logo
+                                        where Id=@Id";
+
+                    cmd.Parameters.AddWithValue("@Registration_Date", poco.RegistrationDate);
+                    cmd.Parameters.AddWithValue("@Company_Website", poco.CompanyWebsite);
+                    cmd.Parameters.AddWithValue("@Contact_Phone", poco.ContactPhone);
+                    cmd.Parameters.AddWithValue("@Contact_Name", poco.ContactName);
+                    cmd.Parameters.AddWithValue("@Company_Logo", poco.CompanyLogo);
+                    cmd.Parameters.AddWithValue("@Id", poco.Id);
+
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
+            }
         }
     }
 }
