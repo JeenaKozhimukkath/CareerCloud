@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CareerCloud.Pocos
 {
-    interface IPoco
+   public interface IPoco
     {
          Guid Id { get; set; }
     }
