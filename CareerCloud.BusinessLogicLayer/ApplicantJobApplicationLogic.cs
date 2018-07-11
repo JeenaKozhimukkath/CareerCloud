@@ -35,6 +35,10 @@ namespace CareerCloud.BusinessLogicLayer
                         $"ApplicationDate cannot be greater than today - {poco.Id}"));
                 }
             }
+            if (exceptions.Count > 0)
+            {
+                throw new AggregateException(exceptions);
+            }
         }
     }   
 }

@@ -30,14 +30,26 @@ namespace CareerCloud.BusinessLogicLayer
             List<ValidationException> exceptions = new List<ValidationException>();
             foreach (CompanyProfilePoco poco in pocos)
             {
-                Regex reWebsite = new Regex(@"^\d{3}\-\d{3}\-\d{4}$");
-                if (!reWebsite.IsMatch(poco.CompanyWebsite))
+                //Regex reWebsite = new Regex(@"^\d{3}\-\d{3}\-\d{4}$");
+                if (string.IsNullOrEmpty(poco.CompanyWebsite))
                 {
                     exceptions.Add(new ValidationException(600,
                         $"Valid websites must end with the following extensions – .ca, .com, .biz - {poco.Id}"));
                 }
-                Regex rePhone = new Regex(@"^\d{3}\-\d{3}\-\d{4}$");
-                if (!rePhone.IsMatch(poco.ContactPhone))
+                else if (poco.CompanyWebsite.Substring(poco.CompanyWebsite.LastIndexOf('.'))!= ".ca"
+                        || poco.CompanyWebsite.Substring(poco.CompanyWebsite.LastIndexOf('.')) != ".com"
+                        || poco.CompanyWebsite.Substring(poco.CompanyWebsite.LastIndexOf('.')) != ".biz")
+                {
+                    exceptions.Add(new ValidationException(600,
+                        $"Valid websites must end with the following extensions – .ca, .com, .biz - {poco.Id}"));
+                }
+                Regex rePhone = new Regex(@"^\d{3}-\d{3}-\d{4}$");
+                if (string.IsNullOrEmpty(poco.ContactPhone))
+                {
+                    exceptions.Add(new ValidationException(601,
+                       $"Must correspond to a valid phone number (e.g. 416-555-1234) - {poco.Id}"));
+                }
+                else if ( !rePhone.IsMatch(poco.ContactPhone))
                 {
                     exceptions.Add(new ValidationException(601,
                         $"Must correspond to a valid phone number (e.g. 416-555-1234) - {poco.Id}"));
