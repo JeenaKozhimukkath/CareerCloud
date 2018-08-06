@@ -23,7 +23,7 @@ namespace CareerCloud.Pocos
 
         [Column("Is_Company_Hidden")]
         public Boolean IsCompanyHidden { get; set; }
-
+        [Timestamp]
         [Column("Time_Stamp")]
         public byte[] TimeStamp { get; set; }
 

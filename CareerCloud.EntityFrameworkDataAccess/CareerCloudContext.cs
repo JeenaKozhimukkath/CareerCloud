@@ -12,7 +12,8 @@ namespace CareerCloud.EntityFrameworkDataAccess
     {
         public CareerCloudContext() : base(@"Data Source=JEENA\HUMBERBRIDGING;Initial Catalog=JOB_PORTAL_DB;Integrated Security=True;User ID=sa;Password=********;")
         {
-
+            var ensureDLLIsCopied =
+               System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
 
         public DbSet<ApplicantEducationPoco> ApplicantEducations { get; set; }
@@ -36,6 +37,51 @@ namespace CareerCloud.EntityFrameworkDataAccess
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ApplicantEducationPoco>()
+                .Property(e => e.TimeStamp)
+                .IsFixedLength();
+            modelBuilder.Entity<ApplicantJobApplicationPoco>()
+               .Property(e => e.TimeStamp)
+               .IsFixedLength();
+            modelBuilder.Entity<ApplicantProfilePoco>()
+               .Property(e => e.TimeStamp)
+               .IsFixedLength();
+            modelBuilder.Entity<ApplicantSkillPoco>()
+                .Property(e => e.TimeStamp)
+                .IsFixedLength();
+            modelBuilder.Entity<ApplicantWorkHistoryPoco>()
+               .Property(e => e.TimeStamp)
+               .IsFixedLength();
+            modelBuilder.Entity<CompanyDescriptionPoco>()
+               .Property(e => e.TimeStamp)
+               .IsFixedLength();
+            modelBuilder.Entity<CompanyJobEducationPoco>()
+                .Property(e => e.TimeStamp)
+                .IsFixedLength();
+            modelBuilder.Entity<CompanyJobPoco>()
+               .Property(e => e.TimeStamp)
+               .IsFixedLength();
+            modelBuilder.Entity<CompanyJobSkillPoco>()
+               .Property(e => e.TimeStamp)
+               .IsFixedLength();
+            modelBuilder.Entity<CompanyJobDescriptionPoco>()
+                .Property(e => e.TimeStamp)
+                .IsFixedLength();
+            modelBuilder.Entity<CompanyLocationPoco>()
+               .Property(e => e.TimeStamp)
+               .IsFixedLength();
+            modelBuilder.Entity<CompanyProfilePoco>()
+               .Property(e => e.TimeStamp)
+               .IsFixedLength();
+            modelBuilder.Entity<SecurityLoginPoco>()
+                .Property(e => e.TimeStamp)
+                .IsFixedLength();
+            modelBuilder.Entity<SecurityLoginsRolePoco>()
+               .Property(e => e.TimeStamp)
+               .IsFixedLength();
+            
+
+
             modelBuilder.Entity<ApplicantProfilePoco>()
                 .HasMany(e => e.ApplicantEducations)
                 .WithRequired(e => e.ApplicantProfiles)
@@ -60,10 +106,14 @@ namespace CareerCloud.EntityFrameworkDataAccess
               .HasForeignKey(e => e.Applicant)
               .WillCascadeOnDelete(false);
 
+            modelBuilder.Entity<ApplicantProfilePoco>()
+             .HasRequired(e => e.SecurityLogins)
+             .WithRequiredPrincipal(e=>e.ApplicantProfiles);
 
-            //modelBuilder.Entity<ApplicantWorkHistoryPoco>()
-            //  .HasRequired(e=>e.CountryCode)
-            //  .
+
+            modelBuilder.Entity<ApplicantWorkHistoryPoco>()
+              .HasRequired(e => e.SystemCountryCodes)
+              .WithRequiredPrincipal();
 
 
             modelBuilder.Entity<CompanyProfilePoco>()
@@ -105,7 +155,9 @@ namespace CareerCloud.EntityFrameworkDataAccess
              .HasForeignKey(e => e.Job)
              .WillCascadeOnDelete(false);
 
-
+            modelBuilder.Entity<CompanyJobPoco>()
+                .HasRequired(e => e.CompanyJobDescriptions)
+                .WithRequiredPrincipal(e=>e.CompanyJobs);
 
 
 
