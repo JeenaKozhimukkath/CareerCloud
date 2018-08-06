@@ -2,18 +2,18 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("CareerCloud.UnitTests.Assignment2")]
+[assembly: AssemblyTitle("CarerrCloud.UnitTests.Assignment4")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("CareerCloud.UnitTests.Assignment2")]
+[assembly: AssemblyProduct("CarerrCloud.UnitTests.Assignment4")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
 
-[assembly: Guid("6e68ddcd-cdb9-4abf-8df3-57ae31f474e3")]
+[assembly: Guid("d8f213b9-4dc6-4c4e-a7a5-d741c0c7dfe3")]
 
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]

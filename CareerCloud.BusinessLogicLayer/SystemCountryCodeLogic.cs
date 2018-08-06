@@ -10,19 +10,31 @@ namespace CareerCloud.BusinessLogicLayer
 {
     public class SystemCountryCodeLogic
     {
-
+        protected IDataRepository<SystemCountryCodePoco> _repository;
+     
         public SystemCountryCodeLogic(IDataRepository<SystemCountryCodePoco> repository)
-        { }
+        { _repository = repository; }
+
+        public SystemCountryCodePoco Get(string code)
+        {
+            return _repository.GetSingle(c => c.Code == code);
+        }
+
+        public List<SystemCountryCodePoco> GetAll()
+        {
+            IList<SystemCountryCodePoco> pocos = _repository.GetAll().ToList();
+            return pocos.ToList();
+        }
         public void Add(SystemCountryCodePoco[] pocos)
         {
             Verify(pocos);
-            Add(pocos);
+            _repository.Add(pocos);
         }
 
         public  void Update(SystemCountryCodePoco[] pocos)
         {
             Verify(pocos);
-            Update(pocos);
+            _repository.Update(pocos);
         }
         protected  void Verify(SystemCountryCodePoco[] pocos)
         {
