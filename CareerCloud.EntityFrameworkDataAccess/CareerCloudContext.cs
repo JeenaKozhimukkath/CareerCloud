@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using CareerCloud.Pocos;
+using System.Configuration;
 
 namespace CareerCloud.EntityFrameworkDataAccess
 {
     public class CareerCloudContext : DbContext
     {
-        public CareerCloudContext() : base(@"Data Source=JEENA\HUMBERBRIDGING;Initial Catalog=JOB_PORTAL_DB;Integrated Security=True;User ID=sa;Password=********;")
+        public CareerCloudContext() : base("dbconnection")
         {
-            var ensureDLLIsCopied =
-               System.Data.Entity.SqlServer.SqlProviderServices.Instance;
+            
         }
 
         public DbSet<ApplicantEducationPoco> ApplicantEducations { get; set; }
@@ -37,51 +37,7 @@ namespace CareerCloud.EntityFrameworkDataAccess
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ApplicantEducationPoco>()
-                .Property(e => e.TimeStamp)
-                .IsFixedLength();
-            modelBuilder.Entity<ApplicantJobApplicationPoco>()
-               .Property(e => e.TimeStamp)
-               .IsFixedLength();
-            modelBuilder.Entity<ApplicantProfilePoco>()
-               .Property(e => e.TimeStamp)
-               .IsFixedLength();
-            modelBuilder.Entity<ApplicantSkillPoco>()
-                .Property(e => e.TimeStamp)
-                .IsFixedLength();
-            modelBuilder.Entity<ApplicantWorkHistoryPoco>()
-               .Property(e => e.TimeStamp)
-               .IsFixedLength();
-            modelBuilder.Entity<CompanyDescriptionPoco>()
-               .Property(e => e.TimeStamp)
-               .IsFixedLength();
-            modelBuilder.Entity<CompanyJobEducationPoco>()
-                .Property(e => e.TimeStamp)
-                .IsFixedLength();
-            modelBuilder.Entity<CompanyJobPoco>()
-               .Property(e => e.TimeStamp)
-               .IsFixedLength();
-            modelBuilder.Entity<CompanyJobSkillPoco>()
-               .Property(e => e.TimeStamp)
-               .IsFixedLength();
-            modelBuilder.Entity<CompanyJobDescriptionPoco>()
-                .Property(e => e.TimeStamp)
-                .IsFixedLength();
-            modelBuilder.Entity<CompanyLocationPoco>()
-               .Property(e => e.TimeStamp)
-               .IsFixedLength();
-            modelBuilder.Entity<CompanyProfilePoco>()
-               .Property(e => e.TimeStamp)
-               .IsFixedLength();
-            modelBuilder.Entity<SecurityLoginPoco>()
-                .Property(e => e.TimeStamp)
-                .IsFixedLength();
-            modelBuilder.Entity<SecurityLoginsRolePoco>()
-               .Property(e => e.TimeStamp)
-               .IsFixedLength();
-            
-
-
+            #region ApplicantProfile
             modelBuilder.Entity<ApplicantProfilePoco>()
                 .HasMany(e => e.ApplicantEducations)
                 .WithRequired(e => e.ApplicantProfiles)
@@ -107,14 +63,15 @@ namespace CareerCloud.EntityFrameworkDataAccess
               .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ApplicantProfilePoco>()
-             .HasRequired(e => e.SecurityLogins)
-             .WithRequiredPrincipal(e=>e.ApplicantProfiles);
+              .HasMany(e => e.ApplicantWorkHistory)
+              .WithRequired(e => e.ApplicantProfiles)
+              .HasForeignKey(e => e.Applicant)
+              .WillCascadeOnDelete(false);
+            
+            #endregion
 
 
-            modelBuilder.Entity<ApplicantWorkHistoryPoco>()
-              .HasRequired(e => e.SystemCountryCodes)
-              .WithRequiredPrincipal();
-
+            #region CompanyProfilePoco
 
             modelBuilder.Entity<CompanyProfilePoco>()
             .HasMany(e => e.CompanyDescriptions)
@@ -134,9 +91,10 @@ namespace CareerCloud.EntityFrameworkDataAccess
               .HasForeignKey(e => e.Company)
               .WillCascadeOnDelete(false);
 
+            #endregion
 
 
-
+            #region CompanyJobPoco
             modelBuilder.Entity<CompanyJobPoco>()
               .HasMany(e => e.ApplicantJobApplications)
               .WithRequired(e => e.CompanyJobs)
@@ -156,16 +114,44 @@ namespace CareerCloud.EntityFrameworkDataAccess
              .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<CompanyJobPoco>()
-                .HasRequired(e => e.CompanyJobDescriptions)
-                .WithRequiredPrincipal(e=>e.CompanyJobs);
+             .HasMany(e => e.CompanyJobDescriptions)
+             .WithRequired(e => e.CompanyJobs)
+             .HasForeignKey(e => e.Job)
+             .WillCascadeOnDelete(false);
 
+            #endregion
 
+            #region SecurityLoginPoco
+            modelBuilder.Entity<SecurityLoginPoco>()
+                .HasMany(e => e.SecurityLoginsLogs)
+                .WithRequired(e => e.SecurityLogins)
+                .HasForeignKey(e => e.Login)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<SecurityLoginPoco>()
+               .HasMany(e => e.SecurityLoginsRoles)
+               .WithRequired(e => e.SecurityLogins)
+               .HasForeignKey(e => e.Login)
+               .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<SecurityLoginPoco>()
+               .HasMany(e => e.ApplicantProfiles)
+               .WithRequired(e => e.SecurityLogins)
+               .HasForeignKey(e => e.Login)
+               .WillCascadeOnDelete(false);
+            #endregion
+
+            #region SecurityRolePoco
 
             modelBuilder.Entity<SecurityRolePoco>()
                 .HasMany(e => e.SecurityLoginsRoles)
                 .WithRequired(e => e.SecurityRoles)
                 .HasForeignKey(e => e.Role)
                 .WillCascadeOnDelete(false);
+
+            #endregion
+
+            #region SystemCountryCodePoco
 
             modelBuilder.Entity<SystemCountryCodePoco>()
              .HasMany(e => e.ApplicantProfiles)
@@ -179,7 +165,17 @@ namespace CareerCloud.EntityFrameworkDataAccess
               .HasForeignKey(e => e.CountryCode)
               .WillCascadeOnDelete(false);
 
+            #endregion
 
+            #region SystemLanguageCodePoco
+
+            modelBuilder.Entity<SystemLanguageCodePoco>()
+               .HasMany(e => e.CompanyDescriptions)
+               .WithRequired(e => e.SystemLanguageCodes)
+               .HasForeignKey(e => e.LanguageId)
+               .WillCascadeOnDelete(false);
+
+            #endregion
         }
 
     }
