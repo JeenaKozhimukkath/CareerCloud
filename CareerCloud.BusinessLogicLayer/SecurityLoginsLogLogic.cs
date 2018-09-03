@@ -24,6 +24,10 @@ namespace CareerCloud.BusinessLogicLayer
             Verify(pocos);
             base.Update(pocos);
         }
+        //public override void Delete(SecurityLoginsLogPoco[] pocos)
+        //{
+        //    base.Delete(pocos); 
+        //}
         protected override void Verify(SecurityLoginsLogPoco[] pocos)
         {
 

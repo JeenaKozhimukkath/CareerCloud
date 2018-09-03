@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace CareerCloud.BusinessLogicLayer
 {
     public abstract class BaseLogic<TPoco>
-        where TPoco : IPoco
+        where TPoco : class,IPoco
     {
         protected IDataRepository<TPoco> _repository;
         public BaseLogic(IDataRepository<TPoco> repository)
